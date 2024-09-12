@@ -5,7 +5,8 @@ import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <h1>DEMOO</h1>
-    <App />
+    <div className='inj-app'>
+      <App />
+    </div>
   </StrictMode>
 );
