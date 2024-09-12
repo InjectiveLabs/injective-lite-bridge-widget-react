@@ -24,7 +24,7 @@ export default defineConfig(({ command }) => {
           formats: ["umd", "es"],
         },
         rollupOptions: {
-          external: ["react", "react-dom"],
+          external: [], //["react", "react-dom"]
           output: {
             globals: {
               react: "React",
