@@ -1,13 +1,17 @@
+import type { Config } from "tailwindcss";
 import {
   scopedPreflightStyles,
   isolateInsideOfContainer,
 } from "tailwindcss-scoped-preflight";
 
-/** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: "class",
+
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
 
   important: ".inj-app",
+
+  blocklist: ["container"],
 
   theme: {
     extend: {},
@@ -21,4 +25,4 @@ export default {
       }),
     }),
   ],
-};
+} satisfies Config;

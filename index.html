@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html
+  lang="en"
+  class="dark"
+>
   <head>
     <meta charset="UTF-8" />
     <link
@@ -12,12 +15,68 @@
       content="width=device-width, initial-scale=1.0"
     />
     <title>Vite + React + TS</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: #f0f0f0;
+      }
+
+      .dark body {
+        background-color: hsl(240, 3.7%, 5.88%);
+        color: #fff;
+      }
+
+      .container {
+        width: 100%;
+        height: 100vh;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: start;
+        padding-top: 100px;
+      }
+
+      .card {
+        max-width: 400px;
+        width: 100%;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+      }
+
+      .dark .card {
+        background-color: hsl(240, 3.7%, 9.88%);
+        color: #fff;
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <button
+      onclick="toggleTheme()"
+      class="fixed top-0 right-0 m-5 p-2 bg-blue-500 text-white rounded-md"
+    >
+      Toggle Theme
+    </button>
+    <div class="container">
+      <div class="card">
+        <div id="root"></div>
+      </div>
+    </div>
     <script
       type="module"
       src="/src/demo.tsx"
     ></script>
+
+    <script>
+      const toggleTheme = () => {
+        document.documentElement.classList.toggle("dark");
+      };
+    </script>
   </body>
 </html>

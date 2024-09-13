@@ -1,13 +1,15 @@
 import React from "react";
 import { useWallet } from "./context/walletContext";
+import { ConnectWallet } from "./components/wallet/ConnectWallet";
 
 const App: React.FC = () => {
-  const { connectMetamask, address } = useWallet();
+  const { isConnected } = useWallet();
 
   return (
     <div className='inj-app'>
-      <h1>Address : {address}</h1>
-      <button onClick={connectMetamask}>Connect Metamask</button>
+      <div className='p-5 w-full'>
+        {isConnected ? <div>Connected</div> : <ConnectWallet />}
+      </div>
     </div>
   );
 };
