@@ -1,5 +1,5 @@
 import React from "react";
-import { useWallet } from "./context/wallet";
+import { useWallet } from "./context/walletContext";
 
 const App: React.FC = () => {
   const { connectMetamask, address } = useWallet();

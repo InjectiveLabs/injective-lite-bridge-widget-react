@@ -1,52 +1,25 @@
 import { isCosmosBrowserWallet, Wallet } from "@injectivelabs/wallet-ts";
-import { createContext, useState, useContext, ReactNode } from "react";
+import { useState, ReactNode } from "react";
 import { validateMetamask } from "../app/wallet/metamask";
 import { validateCosmosWallet } from "../app/wallet/cosmos";
 import { getAddresses, walletStrategy } from "../app/wallet/walletStrategy";
 import { getInjectiveAddress } from "@injectivelabs/sdk-ts";
-
-interface WalletContextType {
-  address: string;
-  injectiveAddress: string;
-  addressConfirmation: string;
-  addresses: string[];
-  hwAddresses: string[];
-  wallet?: Wallet;
-}
-
-interface WalletProviderActions {
-  init: () => void;
-  connectMetamask: () => Promise<void>;
-}
-
-type State = WalletContextType & WalletProviderActions;
-
-const WalletContext = createContext<State>({
-  address: "",
-  addresses: [],
-  hwAddresses: [],
-  wallet: undefined,
-  injectiveAddress: "",
-  addressConfirmation: "",
-  connectMetamask: async () => {},
-  init: () => {},
-});
-
-export const useWallet = () => {
-  const context = useContext(WalletContext);
-  if (!context) {
-    throw new Error("useWallet must be used within a WalletProvider");
-  }
-  return context;
-};
+import WalletContext, { WalletState } from "./walletContext";
 
 export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [address, setAddress] = useState<string>("");
   const [injectiveAddress, setInjectiveAddress] = useState<string>("");
   const [addressConfirmation, setAddressConfirmation] = useState<string>("");
   const [addresses, setAddresses] = useState<string[]>([]);
-  const [hwAddresses, setHwAddresses] = useState<string[]>([]);
+  const [hwAddresses] = useState<string[]>([]);
   const [wallet, setWallet] = useState<Wallet | undefined>(undefined);
+
+  const isConnected = !!(
+    address &&
+    wallet &&
+    injectiveAddress &&
+    addressConfirmation
+  );
 
   async function validate() {
     if (!wallet) {
@@ -80,28 +53,29 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     const addresses = await getAddresses();
     const [address] = addresses;
 
-    setAddresses(addresses);
+    setWallet(Wallet.Metamask);
     setAddress(address);
+    setAddresses(addresses);
     setInjectiveAddress(getInjectiveAddress(address));
     setAddressConfirmation(await walletStrategy.getSessionOrConfirm(address));
 
     // on connect
   }
 
+  const value: WalletState = {
+    wallet,
+    address,
+    addresses,
+    hwAddresses,
+    isConnected,
+    injectiveAddress,
+    addressConfirmation,
+    connectMetamask,
+    validate,
+    init,
+  };
+
   return (
-    <WalletContext.Provider
-      value={{
-        wallet,
-        address,
-        addresses,
-        hwAddresses,
-        injectiveAddress,
-        addressConfirmation,
-        connectMetamask,
-        init,
-      }}
-    >
-      {children}
-    </WalletContext.Provider>
+    <WalletContext.Provider value={value}>{children}</WalletContext.Provider>
   );
 };
