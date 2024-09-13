@@ -6,20 +6,31 @@ import { getAddresses, walletStrategy } from "../app/wallet/walletStrategy";
 import { getInjectiveAddress } from "@injectivelabs/sdk-ts";
 import WalletContext, { WalletState } from "./walletContext";
 
-export const WalletProvider = ({ children }: { children: ReactNode }) => {
-  const [address, setAddress] = useState<string>("");
-  const [injectiveAddress, setInjectiveAddress] = useState<string>("");
-  const [addressConfirmation, setAddressConfirmation] = useState<string>("");
-  const [addresses, setAddresses] = useState<string[]>([]);
-  const [hwAddresses] = useState<string[]>([]);
-  const [wallet, setWallet] = useState<Wallet | undefined>(undefined);
+type WalletProviderProps = {
+  children: ReactNode;
+  wallet?: {
+    wallet: Wallet;
+    address: string;
+    injectiveAddress: string;
+  };
+};
 
-  const isConnected = !!(
-    address &&
-    wallet &&
-    injectiveAddress &&
-    addressConfirmation
+export const WalletProvider = ({
+  children,
+  wallet: walletProps,
+}: WalletProviderProps) => {
+  const [address, setAddress] = useState<string>(walletProps?.address || "");
+  const [injectiveAddress, setInjectiveAddress] = useState<string>(
+    walletProps?.injectiveAddress || ""
   );
+  const [addressConfirmation, setAddressConfirmation] = useState<string>("");
+  const [addresses, setAddresses] = useState<string[]>(
+    walletProps?.address ? [walletProps.address] : []
+  );
+  const [hwAddresses] = useState<string[]>([]);
+  const [wallet, setWallet] = useState<Wallet | undefined>(walletProps?.wallet);
+
+  const isConnected = !!(address && wallet && injectiveAddress);
 
   async function validate() {
     if (!wallet) {
