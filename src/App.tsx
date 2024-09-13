@@ -1,6 +1,7 @@
 import React from "react";
 import { useWallet } from "./context/walletContext";
 import { ConnectWallet } from "./components/wallet/ConnectWallet";
+import Bridge from "./components/bridge/Bridge";
 
 const App: React.FC = () => {
   const { isConnected } = useWallet();
@@ -8,7 +9,7 @@ const App: React.FC = () => {
   return (
     <div className='inj-app'>
       <div className='p-5 w-full'>
-        {isConnected ? <div>Connected</div> : <ConnectWallet />}
+        {isConnected ? <Bridge /> : <ConnectWallet />}
       </div>
     </div>
   );

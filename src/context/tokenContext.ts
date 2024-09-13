@@ -1,7 +1,9 @@
+import { TokenStatic } from "@injectivelabs/sdk-ts";
 import { createContext, useContext } from "react";
 
 interface TokenContextType {
   tokenUsdPriceMap: Record<string, number>;
+  tokens: TokenStatic[];
 }
 
 interface TokenProviderActions {
