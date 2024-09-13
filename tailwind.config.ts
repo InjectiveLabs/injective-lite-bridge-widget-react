@@ -5,9 +5,10 @@ import {
 } from "tailwindcss-scoped-preflight";
 
 export default {
-  darkMode: "class",
+  darkMode: ["selector", '[data-mode="dark"]'],
+  // darkMode: "class",
 
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
 
   important: ".inj-app",
 
@@ -21,7 +22,7 @@ export default {
     scopedPreflightStyles({
       isolationStrategy: isolateInsideOfContainer(".inj-app", {
         // except: ".no-twp", // optional, to exclude some elements under .twp from being preflighted, like external markup
-        rootStyles: "move to container",
+        rootStyles: "add :where",
       }),
     }),
   ],
