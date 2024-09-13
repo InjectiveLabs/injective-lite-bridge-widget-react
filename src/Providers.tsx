@@ -3,6 +3,7 @@ import { AccountProvider } from "./context/AccountProvider";
 import { PeggyProvider } from "./context/PeggyProvider";
 import { TokenProvider } from "./context/TokenProvider";
 import { WalletProvider } from "./context/WalletProvider";
+import { EventProvider } from "./context/EventProvider";
 
 type ProvidersProps = {
   children: React.ReactNode;
@@ -11,16 +12,34 @@ type ProvidersProps = {
     address: string;
     injectiveAddress: string;
   };
+  onInit: (args: unknown) => void;
+  onSuccess: (args: unknown) => void;
+  onError: (args: unknown) => void;
+  mock?: boolean;
 };
 
-export const Providers = ({ children, wallet }: ProvidersProps) => {
+export const Providers = ({
+  children,
+  wallet,
+  onInit,
+  onSuccess,
+  onError,
+  mock,
+}: ProvidersProps) => {
   return (
-    <WalletProvider wallet={wallet}>
-      <TokenProvider>
-        <AccountProvider>
-          <PeggyProvider>{children}</PeggyProvider>
-        </AccountProvider>
-      </TokenProvider>
-    </WalletProvider>
+    <EventProvider
+      onInit={onInit}
+      onError={onError}
+      onSuccess={onSuccess}
+      mock={mock}
+    >
+      <WalletProvider wallet={wallet}>
+        <TokenProvider>
+          <AccountProvider>
+            <PeggyProvider>{children}</PeggyProvider>
+          </AccountProvider>
+        </TokenProvider>
+      </WalletProvider>
+    </EventProvider>
   );
 };

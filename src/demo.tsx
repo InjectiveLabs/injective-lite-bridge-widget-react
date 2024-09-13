@@ -13,6 +13,16 @@ createRoot(document.getElementById("root")!).render(
         address: "0x2968698C6b9Ed6D44b667a0b1F312a3b5D94Ded7",
         injectiveAddress: "inj1995xnrrtnmtdgjmx0g937vf28dwefhkhy6gy5e",
       }}
+      onInit={() => {
+        console.log("[onInit]");
+      }}
+      onSuccess={() => {
+        console.log("[onSuccess]");
+      }}
+      onError={() => {
+        console.log("[onError]");
+      }}
+      mock={false}
     >
       <App />
     </Providers>

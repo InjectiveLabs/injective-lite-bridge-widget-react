@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html
   lang="en"
-  class="dark"
+  data-mode="dark"
 >
   <head>
     <meta charset="UTF-8" />
@@ -27,7 +27,7 @@
         background-color: #f0f0f0;
       }
 
-      .dark body {
+      [data-mode="dark"] body {
         background-color: hsl(240, 3.7%, 5.88%);
         color: #fff;
       }
@@ -50,7 +50,7 @@
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
       }
 
-      .dark .card {
+      [data-mode="dark"] .card {
         background-color: hsl(240, 3.7%, 9.88%);
         color: #fff;
       }
@@ -75,7 +75,12 @@
 
     <script>
       const toggleTheme = () => {
-        document.documentElement.classList.toggle("dark");
+        document.documentElement.setAttribute(
+          "data-mode",
+          document.documentElement.getAttribute("data-mode") === "dark"
+            ? "light"
+            : "dark"
+        );
       };
     </script>
   </body>

@@ -9,6 +9,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useAccount } from "../../context/accountContext";
 import { useState } from "react";
 import { usePeggy } from "../../context/peggyContext";
+import { useEvent } from "../../context/eventContext";
 
 type FormData = {
   amount: string;
@@ -19,6 +20,7 @@ const BridgeForm = () => {
   const { denomBalanceMap } = useAccount();
   const [isLoading, setIsLoading] = useState(false);
   const { peggyEthDeposit } = usePeggy();
+  const { mock, onSuccess } = useEvent();
 
   const availableUSDT = new BigNumberInWei(
     denomBalanceMap[usdtToken.denom]?.balance || "0"
@@ -33,12 +35,20 @@ const BridgeForm = () => {
     formState: { errors },
   } = useForm<FormData>({ mode: "onChange" });
 
-  const onSubmit: SubmitHandler<FormData> = ({ amount }) => {
+  const onSubmit: SubmitHandler<FormData> = async ({ amount }) => {
     setIsLoading(true);
+
+    if (mock) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      onSuccess();
+      setIsLoading(false);
+      return;
+    }
 
     peggyEthDeposit({ amount })
       .then(() => {
         alert("Deposit successful");
+        onSuccess();
       })
       .catch((error) => {
         console.error(error);
