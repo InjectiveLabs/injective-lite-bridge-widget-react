@@ -1,5 +1,9 @@
 import { useWallet } from "../../context/walletContext";
-import { BigNumberInWei, formatWalletAddress } from "@injectivelabs/utils";
+import {
+  BigNumberInBase,
+  BigNumberInWei,
+  formatWalletAddress,
+} from "@injectivelabs/utils";
 import Money from "../assets/Money";
 import Spinner from "../common/Spinner";
 import Button from "../ui/Button";
@@ -24,9 +28,7 @@ const BridgeForm = () => {
 
   const availableUSDT = new BigNumberInWei(
     denomBalanceMap[usdtToken.denom]?.balance || "0"
-  )
-    .toBase(usdtToken.decimals)
-    .toFixed(4);
+  ).toBase(usdtToken.decimals);
 
   const {
     register,
@@ -77,13 +79,23 @@ const BridgeForm = () => {
         {...register("amount", {
           required: "Amount is required",
           validate: (value) => {
-            if (Number(value) > Number(availableUSDT)) {
+            const parsedValue = new BigNumberInBase(value);
+
+            if (parsedValue.isNaN()) {
+              return "Amount must be a number";
+            }
+
+            if (parsedValue.gt(availableUSDT)) {
               return `You can only transfer up to ${availableUSDT} USDT`;
             }
 
-            if (Number(value) < 0) {
+            if (parsedValue.lt(0)) {
               return "Amount must be greater than 0";
             }
+
+            // if (typeof parseFloat(value) !== "number") {
+            //   return "Amount must be a number";
+            // }
 
             return true;
           },
