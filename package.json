@@ -7,7 +7,9 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "rm -rf dist && yarn build:prod && yarn build:testnet",
+    "build:prod": "VITE_NETWORK=mainnet VITE_CHAIN_ID=injective-1 VITE_ETHEREUM_CHAIN_ID=1 vite build --mode prod",
+    "build:testnet": "VITE_NETWORK=testnetSentry VITE_CHAIN_ID=injective-888 VITE_ETHEREUM_CHAIN_ID=11155111 vite build --mode testnet",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -38,5 +40,6 @@
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^5.4.1"
-  }
+  },
+  "license": "MIT"
 }
