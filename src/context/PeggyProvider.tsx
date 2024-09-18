@@ -79,7 +79,13 @@ export const PeggyProvider = ({ children }: { children: ReactNode }) => {
     await fetchBalanceAndAllowance();
   }
 
-  async function peggyEthDeposit({ amount }: { amount: string }) {
+  async function peggyEthDeposit({
+    amount,
+    token,
+  }: {
+    amount: string;
+    token: TokenStatic;
+  }) {
     const sourceAddress = address;
 
     if (!isConnected || !sourceAddress) {
@@ -89,8 +95,6 @@ export const PeggyProvider = ({ children }: { children: ReactNode }) => {
     await validate();
 
     const ethDestinationAddress = address;
-
-    const token = usdtToken;
 
     if (!token) {
       throw new GeneralException(new Error("Cannot find token"));

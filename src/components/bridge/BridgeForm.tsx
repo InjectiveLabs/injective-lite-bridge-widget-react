@@ -8,12 +8,13 @@ import Money from "../assets/Money";
 import Spinner from "../common/Spinner";
 import Button from "../ui/Button";
 import CurrencyInput from "../common/CurrencyInput";
-import { usdtToken } from "../../app/data/tokens";
+import { injErc20Token, injToken, usdtToken } from "../../app/data/tokens";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAccount } from "../../context/accountContext";
 import { useState } from "react";
 import { usePeggy } from "../../context/peggyContext";
 import { useEvent } from "../../context/eventContext";
+import { IS_TESTNET } from "../../app/constants";
 
 type FormData = {
   amount: string;
@@ -22,13 +23,16 @@ type FormData = {
 const BridgeForm = () => {
   const { address } = useWallet();
   const { denomBalanceMap } = useAccount();
-  const [isLoading, setIsLoading] = useState(false);
   const { peggyEthDeposit } = usePeggy();
   const { mock, onSuccess } = useEvent();
 
-  const availableUSDT = new BigNumberInWei(
-    denomBalanceMap[usdtToken.denom]?.balance || "0"
-  ).toBase(usdtToken.decimals);
+  const [token] = useState(IS_TESTNET ? injErc20Token : usdtToken);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const availableBalance = new BigNumberInWei(
+    denomBalanceMap[token.denom]?.balance || "0"
+  ).toBase(token.decimals);
 
   const {
     register,
@@ -47,7 +51,7 @@ const BridgeForm = () => {
       return;
     }
 
-    peggyEthDeposit({ amount })
+    peggyEthDeposit({ amount, token })
       .then(() => {
         alert("Deposit successful");
         onSuccess();
@@ -73,8 +77,8 @@ const BridgeForm = () => {
       </div>
 
       <CurrencyInput
-        denom={usdtToken.denom}
-        available={availableUSDT}
+        denom={token.denom}
+        available={availableBalance}
         setMax={(value) => setValue("amount", value)}
         {...register("amount", {
           required: "Amount is required",
@@ -85,8 +89,8 @@ const BridgeForm = () => {
               return "Amount must be a number";
             }
 
-            if (parsedValue.gt(availableUSDT)) {
-              return `You can only transfer up to ${availableUSDT} USDT`;
+            if (parsedValue.gt(availableBalance)) {
+              return `You can only transfer up to ${availableBalance} USDT`;
             }
 
             if (parsedValue.lt(0)) {

@@ -1,10 +1,13 @@
 import { createContext, useContext } from "react";
+import { TokenStatic } from "@injectivelabs/sdk-ts";
 
 interface PeggyProviderActions {
   peggyEthDeposit: ({
     amount,
+    token,
   }: {
     amount: string;
+    token: TokenStatic;
   }) => Promise<string | undefined>;
 }
 
