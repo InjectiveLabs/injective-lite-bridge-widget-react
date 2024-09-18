@@ -17,7 +17,7 @@ export default defineConfig(({ command, mode }) => {
     // Production configuration
 
     const isTestnet = mode === "testnet";
-    const prefix = isTestnet ? ".testnet" : "";
+
     const outDir = isTestnet ? "dist/testnet" : "dist/mainnet";
 
     return {
@@ -27,7 +27,7 @@ export default defineConfig(({ command, mode }) => {
         lib: {
           entry: "./src/main.tsx",
           name: "InjectiveLiteBridge",
-          fileName: (format) => `index${prefix}.${format}.js`,
+          fileName: (format) => `index.${format}.js`,
           formats: ["umd", "es"],
         },
         rollupOptions: {
