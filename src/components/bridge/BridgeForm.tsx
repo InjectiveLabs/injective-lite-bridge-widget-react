@@ -21,7 +21,7 @@ type FormData = {
 };
 
 const BridgeForm = () => {
-  const { address } = useWallet();
+  const { address, wallet } = useWallet();
   const { denomBalanceMap } = useAccount();
   const { peggyEthDeposit } = usePeggy();
   const { mock, onSuccess } = useEvent();
@@ -46,7 +46,10 @@ const BridgeForm = () => {
 
     if (mock) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      onSuccess();
+      onSuccess({
+        wallet,
+        amount,
+      });
       setIsLoading(false);
       return;
     }
@@ -54,7 +57,10 @@ const BridgeForm = () => {
     peggyEthDeposit({ amount, token })
       .then(() => {
         alert("Deposit successful");
-        onSuccess();
+        onSuccess({
+          wallet,
+          amount,
+        });
       })
       .catch((error) => {
         console.error(error);
