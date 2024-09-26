@@ -15,7 +15,6 @@ export default defineConfig(({ command, mode }) => {
     };
   } else {
     // Production configuration
-
     const isTestnet = mode === "testnet";
 
     const outDir = isTestnet ? "dist/testnet" : "dist/mainnet";

@@ -6,10 +6,11 @@
     "dist"
   ],
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --mode prod",
+    "dev:testnet": "vite --mode testnet",
     "build": "rm -rf dist && yarn build:prod && yarn build:testnet",
-    "build:prod": "VITE_NETWORK=mainnet VITE_CHAIN_ID=injective-1 VITE_ETHEREUM_CHAIN_ID=1 vite build --mode prod",
-    "build:testnet": "VITE_NETWORK=testnetSentry VITE_CHAIN_ID=injective-888 VITE_ETHEREUM_CHAIN_ID=11155111 vite build --mode testnet",
+    "build:prod": "vite build --mode prod",
+    "build:testnet": "vite build --mode testnet",
     "lint": "eslint .",
     "preview": "vite preview"
   },
