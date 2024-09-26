@@ -56,7 +56,6 @@ const BridgeForm = () => {
 
     peggyEthDeposit({ amount, token })
       .then(() => {
-        alert("Deposit successful");
         onSuccess({
           wallet,
           amount,
