@@ -1,4 +1,5 @@
-import { MsgBroadcaster, Web3Broadcaster } from "@injectivelabs/wallet-ts";
+import { MsgBroadcaster, Web3Broadcaster } from "@injectivelabs/wallet-core";
+import { EvmChainId } from "@injectivelabs/ts-types";
 import { walletStrategy } from "./walletStrategy";
 import {
   NETWORK,
@@ -20,5 +21,5 @@ export const msgBroadcaster = new MsgBroadcaster({
 export const web3Broadcaster = new Web3Broadcaster({
   walletStrategy,
   network: NETWORK,
-  ethereumChainId: ETHEREUM_CHAIN_ID,
+  evmChainId: ETHEREUM_CHAIN_ID as unknown as EvmChainId,
 });

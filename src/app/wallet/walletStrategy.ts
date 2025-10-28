@@ -1,4 +1,4 @@
-import { WalletStrategy } from "@injectivelabs/wallet-ts";
+import { WalletStrategy } from "@injectivelabs/wallet-strategy";
 import {
   ErrorType,
   WalletException,
@@ -12,26 +12,21 @@ import {
   ALCHEMY_SEPOLIA_KEY,
 } from "./../constants/setup";
 import { alchemyRpcEndpoint } from "./../constants/setup";
-import {
-  APP_NAME,
-  APP_BASE_URL,
-  WALLET_CONNECT_PROJECT_ID,
-} from "./../constants/setup";
+// import {
+//   APP_NAME,
+//   APP_BASE_URL,
+//   WALLET_CONNECT_PROJECT_ID,
+// } from "./../constants/setup";
 
+import { EvmChainId } from "@injectivelabs/ts-types";
 export const walletStrategy = new WalletStrategy({
   chainId: CHAIN_ID,
-  ethereumOptions: {
-    ethereumChainId: ETHEREUM_CHAIN_ID,
+  evmOptions: {
+    evmChainId: ETHEREUM_CHAIN_ID as unknown as EvmChainId,
     rpcUrl: alchemyRpcEndpoint,
   },
-  options: {
-    metadata: {
-      name: APP_NAME,
-      url: APP_BASE_URL,
-      projectId: WALLET_CONNECT_PROJECT_ID,
-      description: "",
-    },
-  },
+
+  strategies: {},
 });
 
 export const alchemyKey = (

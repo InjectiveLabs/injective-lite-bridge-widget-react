@@ -13,8 +13,8 @@ const App: React.FC = () => {
   });
 
   return (
-    <div className='inj-app'>
-      <div className='p-5 w-full dark:text-white text-black'>
+    <div className="inj-app">
+      <div className="w-full dark:text-white text-black">
         {isConnected ? <Bridge /> : <ConnectWallet />}
       </div>
     </div>

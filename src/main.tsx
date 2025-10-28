@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { Providers } from "./Providers.tsx";
-import { Wallet } from "@injectivelabs/wallet-ts";
+import { Wallet } from "@injectivelabs/wallet-base";
 
 type WidgetProps = {
   wallet?: {
@@ -14,6 +14,7 @@ type WidgetProps = {
   onInit?: (...args: unknown[]) => unknown;
   onError?: (...args: unknown[]) => unknown;
   onSuccess?: (...args: unknown[]) => unknown;
+  onBalanceFetched?: (...args: unknown[]) => unknown;
   mock?: boolean;
 };
 
@@ -27,7 +28,7 @@ declare global {
 
 const createWidget: CreateWidgetFn = (
   selector: string,
-  { onInit, onSuccess, onError, wallet, mock }: WidgetProps
+  { onInit, onSuccess, onError, onBalanceFetched, wallet, mock }: WidgetProps
 ) => {
   const root = createRoot(document.getElementById(selector)!);
   root.render(
@@ -38,6 +39,7 @@ const createWidget: CreateWidgetFn = (
         onInit={onInit ?? (() => {})}
         onSuccess={onSuccess ?? (() => {})}
         onError={onError ?? (() => {})}
+        onBalanceFetched={onBalanceFetched ?? (() => {})}
       >
         <App />
       </Providers>

@@ -5,7 +5,7 @@ type ButtonProps = {
 const Button = ({ children, ...props }: ButtonProps) => {
   return (
     <button
-      className='w-full flex justify-center items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-md'
+      className="w-full flex justify-center items-center space-x-2 bg-[#80B5FF] hover:bg-[#80B5FF]/80 text-sm font-medium text-black px-4 py-2.5 rounded-md"
       {...props}
     >
       {children}

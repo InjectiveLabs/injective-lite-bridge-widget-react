@@ -5,10 +5,10 @@ import {
   UnspecifiedErrorCode,
 } from "@injectivelabs/exceptions";
 import { walletStrategy } from "./walletStrategy";
-import { UtilsWallets } from "@injectivelabs/wallet-ts/dist/esm/exports";
+
 import { ETHEREUM_CHAIN_ID } from "../constants";
 export const isMetamaskInstalled = async (): Promise<boolean> => {
-  const provider = await UtilsWallets.getMetamaskProvider();
+  const provider = await walletStrategy.getEip1193Provider();
 
   return !!provider;
 };
@@ -54,26 +54,12 @@ export const validateMetamask = async (address: string) => {
     chainId !== metamaskChainId;
 
   if (metamaskChainIdDoesntMatchTheActiveChainId) {
-    return await UtilsWallets.updateMetamaskNetwork(chainId);
+    return await updateMetamaskNetwork();
   }
 
-  const metamaskProvider = await UtilsWallets.getMetamaskProvider();
+  const metamaskProvider = await walletStrategy.getEip1193Provider();
 
   if (!metamaskProvider) {
-    throw new GeneralException(
-      new Error("You are connected to the wrong wallet. Please use Metamask."),
-      {
-        code: UnspecifiedErrorCode,
-        type: ErrorType.WalletError,
-      }
-    );
-  }
-
-  if (
-    metamaskProvider.isPhantom ||
-    metamaskProvider.isOkxWallet ||
-    metamaskProvider.isTrustWallet
-  ) {
     throw new GeneralException(
       new Error("You are connected to the wrong wallet. Please use Metamask."),
       {
@@ -85,9 +71,14 @@ export const validateMetamask = async (address: string) => {
 };
 
 export const switchToActiveMetamaskNetwork = async () => {
-  try {
-    await UtilsWallets.updateMetamaskNetwork(ETHEREUM_CHAIN_ID);
-  } catch (e) {
-    throw e;
-  }
+  return await updateMetamaskNetwork();
 };
+
+async function updateMetamaskNetwork() {
+  return walletStrategy.getEip1193Provider().then((provider) => {
+    return provider.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: `0x${ETHEREUM_CHAIN_ID.toString(16)}` }],
+    });
+  });
+}

@@ -1,82 +1,41 @@
 import { ReactNode } from "react";
 import PeggyContext, { PeggyState } from "./peggyContext";
-import { Coin, TokenStatic } from "@injectivelabs/sdk-ts";
+import { TokenStatic } from "@injectivelabs/sdk-ts";
 import { BigNumberInBase, BigNumberInWei } from "@injectivelabs/utils";
-import { NETWORK, UNLIMITED_ALLOWANCE, ZERO_IN_WEI } from "../app/constants";
 import { useWallet } from "./walletContext";
-import { injErc20Token, injToken, usdtToken } from "../app/data/tokens";
-import { fetchGasPrice } from "../app/ethGasPrice";
-import { web3Composer } from "../app/web3composer";
 import { web3Broadcaster } from "../app/wallet/walletService";
 import { useAccount } from "./accountContext";
 import { GeneralException } from "@injectivelabs/exceptions";
+import { Address, getAddress, maxUint256 } from "viem";
+import { erc20WethContract } from "../app/contracts/Erc20WethContract";
+import { peggyContract } from "../app/contracts/PeggyContract";
+import { injectivePeggyBridgeAddress } from "../app/data/web3";
 
 export const PeggyProvider = ({ children }: { children: ReactNode }) => {
-  const { fetchBalanceAndAllowance, denomBalanceMap } = useAccount();
+  const { denomBalanceMap } = useAccount();
   const { isConnected, validate, address } = useWallet();
   const allowanceResetSymbols = ["USDT"];
 
-  async function resetOrSetEthAllowance(token: TokenStatic, allowance: Coin) {
-    // const bridgeStore = useBridgeStore();
-    // const walletStore = useWalletStore();
-
-    /** TODO: investigate if we need this */
-    //   walletStore.$patch({
-    //     queueStatus: StatusType.Idle,
-    //   });
-
-    /**
-     * If the allowance is not 0 we first need to reset it to 0
-     * and then set it again to the unlimited allowance
-     * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
-     */
-    if (
-      new BigNumberInBase(allowance.amount).gte(0) &&
-      allowanceResetSymbols.includes(token.symbol)
-    ) {
-      await peggySetTokenAllowance(token, ZERO_IN_WEI);
-    }
-
-    await peggySetTokenAllowance(token);
-  }
-
-  async function peggySetTokenAllowance(
-    token: TokenStatic,
-    amount = UNLIMITED_ALLOWANCE
-  ) {
-    // const walletStore = useWalletStore();
-    // const accountStore = useAccountStore();
-
-    if (!isConnected) {
-      return;
-    }
-
-    await validate();
-
-    const tokenAddress =
-      token?.address === injToken.denom
-        ? injErc20Token.address
-        : token?.address;
-
-    if (!tokenAddress) {
-      return;
-    }
-
-    const gasPrice = await fetchGasPrice(NETWORK);
-
-    const tx = await web3Composer.getSetTokenAllowanceTx({
-      gasPrice,
-      tokenAddress,
-      address: address,
-      amount: amount.toFixed(),
+  async function setAllowance({
+    amount = maxUint256,
+    token,
+  }: {
+    amount?: bigint;
+    token: TokenStatic;
+  }) {
+    const tx = await erc20WethContract.setTokenAllowance({
+      amount,
+      fromAddress: address as Address,
+      tokenAddress: getAddress(token.address) as Address,
+      spenderAddress: injectivePeggyBridgeAddress as Address,
     });
 
-    await web3Broadcaster.sendTransaction({
+    const txHash = await web3Broadcaster.sendTransaction({
       tx,
       address: address,
     });
 
-    await fetchBalanceAndAllowance();
+    return txHash;
   }
 
   async function peggyEthDeposit({
@@ -102,32 +61,39 @@ export const PeggyProvider = ({ children }: { children: ReactNode }) => {
 
     const actualAmount = new BigNumberInBase(amount).toWei(token.decimals);
 
-    const gasPrice = await fetchGasPrice(NETWORK);
-
-    const allowanceByDenom = denomBalanceMap[token.denom].allowance;
+    const allowanceByDenom =
+      denomBalanceMap[getAddress(token.address)].allowance;
 
     const hasEnoughAllowance = new BigNumberInWei(actualAmount).lte(
       allowanceByDenom
     );
 
-    if (!hasEnoughAllowance) {
-      await resetOrSetEthAllowance(token, {
-        amount: allowanceByDenom,
-        denom: token.denom, // TODO check if we need to remove peggy
-      });
+    const isZeroAllowance = new BigNumberInBase(allowanceByDenom).isZero();
+
+    if (
+      !hasEnoughAllowance &&
+      allowanceResetSymbols.includes(token.symbol) &&
+      !isZeroAllowance
+    ) {
+      // We need to reset the allowance to 0 first for legacy tokens if we want to increase allowance
+      await setAllowance({ amount: 0n, token });
     }
 
-    const tx = await web3Composer.getPeggyTransferTx({
-      gasPrice,
-      address: address,
-      denom: token.denom,
+    if (!hasEnoughAllowance) {
+      // set to unlimited allowance
+      await setAllowance({ amount: maxUint256, token });
+    }
+
+    const tx = await peggyContract.sendToInjective({
       amount: actualAmount.toFixed(),
+      fromAddress: address,
+      tokenAddress: getAddress(token.address),
       destinationAddress: ethDestinationAddress,
     });
 
     const txHash = await web3Broadcaster.sendTransaction({
       tx,
-      address: address,
+      address,
     });
 
     return txHash;

@@ -9,7 +9,7 @@ export const INJ_LOGO_URL =
 export const INJ_LOGO_DARK_URL =
   "https://imagedelivery.net/lPzngbR8EltRfBOi_WYaXw/efaa2c96-5463-4707-0d2b-19e5b63df000/public";
 export const USDT_LOGO_URL =
-  "https://imagedelivery.net/lPzngbR8EltRfBOi_WYaXw/a0bd252b-1005-47ef-d209-7c1c4a3cbf00/public";
+  "https://imagedelivery.net/lPzngbR8EltRfBOi_WYaXw/e46e1742-fb16-4393-cc40-83b20e875400/public";
 export const AUSD_LOGO_URL =
   "https://imagedelivery.net/lPzngbR8EltRfBOi_WYaXw/4b446611-8af6-424f-abc6-e41defe1d800/public";
 export const UNKNOWN_LOGO_URL =

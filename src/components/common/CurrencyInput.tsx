@@ -30,20 +30,20 @@ const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
 
     return (
       <label
-        htmlFor='id'
-        className='border rounded-md p-2 border-gray-300 dark:border-gray-700 block'
+        htmlFor="id"
+        className="border rounded-md px-4 py-6 border-gray-300 dark:border-[#42474E] block"
       >
-        <div className='flex justify-between mb-2 p-1'>
-          <p className='text-xs flex-1 text-gray-500 dark:text-gray-500'>
+        <div className="flex justify-between">
+          <p className="text-sm flex-1 text-gray-500 dark:text-gray-500">
             Amount
           </p>
-          <div className='flex items-center gap-2'>
-            <p className='text-xs text-blue-500'>
+          <div className="flex items-center gap-2">
+            <p className="text-xs font-medium text-[#4390FA]">
               Available: {availableAmount}
             </p>
             <button
-              type='button'
-              className='text-xs text-blue-500 bg-blue-500/10 px-1 rounded font-light hover:bg-blue-500/20 none'
+              type="button"
+              className="text-xs font-medium text-[#4390FA] bg-[#4390FA]/10 py-0.5 px-1.5 rounded font-light hover:bg-[#4390FA]/20 none"
               onClick={handleMax}
             >
               MAX
@@ -51,14 +51,14 @@ const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
           </div>
         </div>
 
-        <div className='flex'>
+        <div className="flex pt-1">
           <input
             ref={ref}
-            type='string'
-            step='any'
+            type="string"
+            step="any"
             id={id}
-            className='flex-1 bg-transparent min-w-0 focus:outline-none p-1'
-            placeholder='0.00'
+            className="flex-1 bg-transparent min-w-0 focus:outline-none  font-semibold text-xl"
+            placeholder="0.00"
             onChange={(e) => {
               // const regex = /^(?!-?\.)(-?[0-9]*\.?[0-9]*)$/;   // Allow negative sign
               const regex = /^[0-9]+\.?[0-9]*$/;
@@ -71,13 +71,14 @@ const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
             }}
             {...restProps}
           />
-          <div className='p-1 flex justify-center items-center gap-2'>
+
+          <div className="p-1 flex justify-center items-center gap-2">
             <img
               src={token.logo}
               alt={token.name}
-              className='size-6 border border-gray-300 dark:border-gray-700 bg-gray-300 dark:bg-gray-700 rounded-full p-0.5'
+              className="size-6 bg-gray-300 dark:bg-gray-700 rounded-full"
             />
-            <p className='text-xl font-semibold'>{token.symbol}</p>
+            <p className="text-xl font-semibold">{token.symbol}</p>
           </div>
         </div>
       </label>

@@ -1,7 +1,7 @@
-import { isCosmosBrowserWallet, Wallet } from "@injectivelabs/wallet-ts";
+import { Wallet } from "@injectivelabs/wallet-base";
 import { useState, ReactNode } from "react";
 import { validateMetamask } from "../app/wallet/metamask";
-import { validateCosmosWallet } from "../app/wallet/cosmos";
+
 import { getAddresses, walletStrategy } from "../app/wallet/walletStrategy";
 import { getInjectiveAddress } from "@injectivelabs/sdk-ts";
 import WalletContext, { WalletState } from "./walletContext";
@@ -40,13 +40,6 @@ export const WalletProvider = ({
     if (wallet === Wallet.Metamask) {
       await validateMetamask(address);
     }
-
-    if (isCosmosBrowserWallet(wallet)) {
-      await validateCosmosWallet({
-        wallet,
-        address: injectiveAddress,
-      });
-    }
   }
 
   function init() {
@@ -73,6 +66,21 @@ export const WalletProvider = ({
     // on connect
   }
 
+  async function connectPhantom() {
+    await connectWallet(Wallet.Phantom);
+
+    const addresses = await getAddresses();
+    const [address] = addresses;
+
+    setWallet(Wallet.Phantom);
+    setAddress(address);
+    setAddresses(addresses);
+    setInjectiveAddress(getInjectiveAddress(address));
+    setAddressConfirmation(await walletStrategy.getSessionOrConfirm(address));
+
+    // on connect
+  }
+
   const value: WalletState = {
     wallet,
     address,
@@ -82,6 +90,7 @@ export const WalletProvider = ({
     injectiveAddress,
     addressConfirmation,
     connectMetamask,
+    connectPhantom,
     validate,
     init,
   };

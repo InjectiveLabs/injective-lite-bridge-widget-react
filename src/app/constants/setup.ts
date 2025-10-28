@@ -5,7 +5,7 @@ import {
   Network,
   getNetworkEndpoints,
 } from "@injectivelabs/networks";
-import { EthereumChainId } from "@injectivelabs/ts-types";
+import { EvmChainId } from "@injectivelabs/ts-types";
 
 export const NETWORK =
   (import.meta.env.VITE_NETWORK as Network) || Network.Testnet;
@@ -40,17 +40,19 @@ export const SOL_ALCHEMY_KEY = (import.meta.env.VITE_SOL_ALCHEMY_KEY ||
 
 export const FEE_PAYER_PUB_KEY = import.meta.env.VITE_FEE_PAYER_PUB_KEY || "";
 
-export const getRpcUrlsForChainIds = (): Record<EthereumChainId, string> => {
+export const getRpcUrlsForChainIds = (): Partial<
+  Record<EvmChainId, string>
+> => {
   return {
-    [EthereumChainId.Ganache]: "http://localhost:8545",
-    [EthereumChainId.HardHat]: "http://localhost:8545",
-    [EthereumChainId.Goerli]: `https://eth-goerli.alchemyapi.io/v2/${ALCHEMY_GOERLI_KEY}`,
-    [EthereumChainId.Sepolia]: `https://eth-sepolia.alchemyapi.io/v2/${ALCHEMY_SEPOLIA_KEY}`,
-    [EthereumChainId.Kovan]: `https://eth-kovan.alchemyapi.io/v2/${ALCHEMY_KOVAN_KEY}`,
-    [EthereumChainId.Mainnet]: `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_KEY}`,
-    [EthereumChainId.Injective]: "",
-    [EthereumChainId.Rinkeby]: "",
-    [EthereumChainId.Ropsten]: "",
+    [EvmChainId.Ganache]: "http://localhost:8545",
+    [EvmChainId.HardHat]: "http://localhost:8545",
+    [EvmChainId.Goerli]: `https://eth-goerli.alchemyapi.io/v2/${ALCHEMY_GOERLI_KEY}`,
+    [EvmChainId.Sepolia]: `https://eth-sepolia.alchemyapi.io/v2/${ALCHEMY_SEPOLIA_KEY}`,
+    [EvmChainId.Kovan]: `https://eth-kovan.alchemyapi.io/v2/${ALCHEMY_KOVAN_KEY}`,
+    [EvmChainId.Mainnet]: `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_KEY}`,
+    [EvmChainId.Injective]: "",
+    [EvmChainId.Rinkeby]: "",
+    [EvmChainId.Ropsten]: "",
   };
 };
 

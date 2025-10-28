@@ -1,4 +1,4 @@
-import { Wallet } from "@injectivelabs/wallet-ts";
+import { Wallet } from "@injectivelabs/wallet-base";
 import { createContext, useContext } from "react";
 
 interface WalletContextType {
@@ -15,6 +15,7 @@ interface WalletProviderActions {
   init: () => void;
   validate: () => Promise<void>;
   connectMetamask: () => Promise<void>;
+  connectPhantom: () => Promise<void>;
 }
 
 export type WalletState = WalletContextType & WalletProviderActions;

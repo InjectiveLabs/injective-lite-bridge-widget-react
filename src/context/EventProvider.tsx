@@ -7,6 +7,7 @@ type Props = {
   onInit: (...args: unknown[]) => unknown;
   onSuccess: (...args: unknown[]) => unknown;
   onError: (...args: unknown[]) => unknown;
+  onBalanceFetched: (...args: unknown[]) => unknown;
 };
 
 export const EventProvider = ({
@@ -14,10 +15,19 @@ export const EventProvider = ({
   onInit,
   onSuccess,
   onError,
+  onBalanceFetched,
   mock,
 }: Props) => {
   return (
-    <EventContext.Provider value={{ onInit, onSuccess, onError, mock }}>
+    <EventContext.Provider
+      value={{
+        onInit,
+        onSuccess,
+        onError,
+        onBalanceFetched,
+        mock: mock ?? false,
+      }}
+    >
       {children}
     </EventContext.Provider>
   );

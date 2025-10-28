@@ -51,4 +51,12 @@ export interface CoinGeckoCoin {
   name: string;
 }
 
+export type ERC20BalanceAndAllowance = {
+  symbol: string;
+  address: string;
+  balance: string;
+  decimals: number;
+  allowance: string;
+};
+
 export * from "./enums";

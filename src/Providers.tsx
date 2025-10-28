@@ -1,4 +1,4 @@
-import { Wallet } from "@injectivelabs/wallet-ts";
+import { Wallet } from "@injectivelabs/wallet-base";
 import { AccountProvider } from "./context/AccountProvider";
 import { PeggyProvider } from "./context/PeggyProvider";
 import { TokenProvider } from "./context/TokenProvider";
@@ -15,6 +15,7 @@ type ProvidersProps = {
   onInit: (args: unknown) => void;
   onSuccess: (args: unknown) => void;
   onError: (args: unknown) => void;
+  onBalanceFetched: (args: unknown) => void;
   mock?: boolean;
 };
 
@@ -24,6 +25,7 @@ export const Providers = ({
   onInit,
   onSuccess,
   onError,
+  onBalanceFetched,
   mock,
 }: ProvidersProps) => {
   return (
@@ -31,6 +33,7 @@ export const Providers = ({
       onInit={onInit}
       onError={onError}
       onSuccess={onSuccess}
+      onBalanceFetched={onBalanceFetched}
       mock={mock}
     >
       <WalletProvider wallet={wallet}>

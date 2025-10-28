@@ -1,32 +1,45 @@
 import { ReactNode, useCallback, useMemo, useState } from "react";
 import AccountContext, { AccountState } from "./accountContext";
-import { web3Client } from "../app/index";
+import { getAddress } from "viem";
 import { useWallet } from "./walletContext";
 import { injErc20Token, usdtToken } from "../app/data/tokens";
+import { getErc20BalancesAndAllowances } from "../app/contracts/fetchErc20BalanceAndAllowance";
+import { injectivePeggyBridgeAddress } from "../app/data/web3";
+
+type BalanceAndAllowance = Record<
+  string,
+  { balance: string; allowance: string }
+>;
 
 export const AccountProvider = ({ children }: { children: ReactNode }) => {
   const { address } = useWallet();
-  const [denomBalanceMap, setDenomBalanceMap] = useState<
-    Record<string, { balance: string; allowance: string }>
-  >({});
+  const [denomBalanceMap, setDenomBalanceMap] = useState<BalanceAndAllowance>(
+    {}
+  );
 
   const tokens = useMemo(() => [usdtToken, injErc20Token], []);
 
   const fetchBalanceAndAllowance = useCallback(async () => {
-    {
-      for await (const token of tokens) {
-        const { balance, allowance } =
-          await web3Client.fetchTokenBalanceAndAllowance({
-            address: address,
-            contractAddress: token.denom.replace("peggy", ""),
-          });
+    const balancesAndAllowances = await getErc20BalancesAndAllowances({
+      address: address,
+      tokenList: tokens,
+      spender: injectivePeggyBridgeAddress,
+    });
 
-        setDenomBalanceMap((p) => ({
-          ...p,
-          [token.denom]: { balance, allowance },
-        }));
-      }
-    }
+    console.log({ balancesAndAllowances });
+
+    const balanceAndAllowanceMap = balancesAndAllowances.reduce(
+      (acc, token) => {
+        acc[getAddress(token.address)] = {
+          balance: token.balance,
+          allowance: token.allowance,
+        };
+        return acc;
+      },
+      {} as BalanceAndAllowance
+    );
+
+    setDenomBalanceMap(balanceAndAllowanceMap);
   }, [address, tokens]);
 
   const value: AccountState = {
