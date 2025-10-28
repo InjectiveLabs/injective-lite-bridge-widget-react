@@ -23,7 +23,7 @@ const Bridge = () => {
           setIsLoading(false);
         });
     }
-  }, [address, fetchBalanceAndAllowance]);
+  }, [address, fetchBalanceAndAllowance, onBalanceFetched]);
 
   if (isLoading) {
     return (

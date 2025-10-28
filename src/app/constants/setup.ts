@@ -40,23 +40,26 @@ export const SOL_ALCHEMY_KEY = (import.meta.env.VITE_SOL_ALCHEMY_KEY ||
 
 export const FEE_PAYER_PUB_KEY = import.meta.env.VITE_FEE_PAYER_PUB_KEY || "";
 
-export const getRpcUrlsForChainIds = (): Partial<
-  Record<EvmChainId, string>
-> => {
-  return {
-    [EvmChainId.Ganache]: "http://localhost:8545",
-    [EvmChainId.HardHat]: "http://localhost:8545",
-    [EvmChainId.Goerli]: `https://eth-goerli.alchemyapi.io/v2/${ALCHEMY_GOERLI_KEY}`,
-    [EvmChainId.Sepolia]: `https://eth-sepolia.alchemyapi.io/v2/${ALCHEMY_SEPOLIA_KEY}`,
-    [EvmChainId.Kovan]: `https://eth-kovan.alchemyapi.io/v2/${ALCHEMY_KOVAN_KEY}`,
-    [EvmChainId.Mainnet]: `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_KEY}`,
-    [EvmChainId.Injective]: "",
-    [EvmChainId.Rinkeby]: "",
-    [EvmChainId.Ropsten]: "",
-  };
+export const getAlchemyRpcEndpointForChainId = (chainId: EvmChainId) => {
+  if (chainId === EvmChainId.Mainnet) {
+    return `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_KEY}`;
+  }
+
+  if (chainId === EvmChainId.Sepolia) {
+    return `https://eth-sepolia.alchemyapi.io/v2/${ALCHEMY_SEPOLIA_KEY}`;
+  }
+
+  return `https://eth-sepolia.alchemyapi.io/v2/${ALCHEMY_SEPOLIA_KEY}`;
 };
 
-export const alchemyRpcEndpoint =
-  IS_TESTNET || IS_DEVNET
-    ? `https://eth-sepolia.alchemyapi.io/v2/${ALCHEMY_SEPOLIA_KEY}`
-    : `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_KEY}`;
+export const getAlchemyUrl = (network: Network): string => {
+  if (isMainnet(network)) {
+    return `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_KEY}`;
+  }
+
+  if (isTestnet(network)) {
+    return `https://eth-sepolia.alchemyapi.io/v2/${ALCHEMY_SEPOLIA_KEY}`;
+  }
+
+  return `https://eth-sepolia.alchemyapi.io/v2/${ALCHEMY_SEPOLIA_KEY}`;
+};

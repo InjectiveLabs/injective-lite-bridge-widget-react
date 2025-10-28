@@ -10,12 +10,9 @@ import {
   createPublicClient,
   encodeFunctionData,
 } from "viem";
-import {
-  estimateGasAndNonce,
-  getAlchemyUrl,
-  getInjNetworkToChain,
-} from "./utils";
+import { estimateGasAndNonce, getInjNetworkToChain } from "./utils";
 import type { Network } from "@injectivelabs/networks";
+import { getAlchemyUrl } from "../constants";
 
 import type { Chain, Address, PublicClient } from "viem";
 

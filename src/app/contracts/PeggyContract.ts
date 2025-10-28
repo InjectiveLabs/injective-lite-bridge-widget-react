@@ -9,12 +9,8 @@ import {
   createPublicClient,
   encodeFunctionData,
 } from "viem";
-import {
-  estimateGasAndNonce,
-  getAlchemyUrl,
-  getInjNetworkToChain,
-} from "./utils";
-
+import { estimateGasAndNonce, getInjNetworkToChain } from "./utils";
+import { getAlchemyUrl } from "../constants";
 import type { Chain, Address, PublicClient } from "viem";
 
 export const peggyAbi = parseAbi([

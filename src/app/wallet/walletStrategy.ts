@@ -10,20 +10,16 @@ import {
   ALCHEMY_KEY,
   ETHEREUM_CHAIN_ID,
   ALCHEMY_SEPOLIA_KEY,
+  NETWORK,
 } from "./../constants/setup";
-import { alchemyRpcEndpoint } from "./../constants/setup";
-// import {
-//   APP_NAME,
-//   APP_BASE_URL,
-//   WALLET_CONNECT_PROJECT_ID,
-// } from "./../constants/setup";
+import { getAlchemyUrl } from "./../constants/setup";
 
 import { EvmChainId } from "@injectivelabs/ts-types";
 export const walletStrategy = new WalletStrategy({
   chainId: CHAIN_ID,
   evmOptions: {
     evmChainId: ETHEREUM_CHAIN_ID as unknown as EvmChainId,
-    rpcUrl: alchemyRpcEndpoint,
+    rpcUrl: getAlchemyUrl(NETWORK),
   },
 
   strategies: {},

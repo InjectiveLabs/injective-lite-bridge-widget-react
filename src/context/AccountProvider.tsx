@@ -26,8 +26,6 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
       spender: injectivePeggyBridgeAddress,
     });
 
-    console.log({ balancesAndAllowances });
-
     const balanceAndAllowanceMap = balancesAndAllowances.reduce(
       (acc, token) => {
         acc[getAddress(token.address)] = {

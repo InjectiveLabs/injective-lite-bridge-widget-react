@@ -1,7 +1,7 @@
 import { mainnet, sepolia } from "viem/chains";
 import { http, erc20Abi, createPublicClient } from "viem";
 import { NETWORK, IS_MAINNET } from "../constants";
-import { getAlchemyUrl } from "./utils";
+import { getAlchemyUrl } from "../constants";
 import type { ERC20BalanceAndAllowance } from "../../types";
 import type { TokenStatic } from "@injectivelabs/sdk-ts";
 
