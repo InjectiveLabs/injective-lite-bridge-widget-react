@@ -1,6 +1,6 @@
 {
   "name": "lite-bridge-widget-injective-test",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "type": "module",
   "files": [
     "dist"
@@ -16,14 +16,14 @@
   },
   "dependencies": {
     "@bangjelkoski/vite-plugin-node-polyfills": "^0.0.2",
-    "@injectivelabs/exceptions": "1.16.20",
-    "@injectivelabs/networks": "1.16.20",
-    "@injectivelabs/sdk-ts": "1.16.20",
-    "@injectivelabs/utils": "1.16.20",
-    "@injectivelabs/wallet-core": "1.16.20",
-    "@injectivelabs/wallet-base": "1.16.20",
-    "@injectivelabs/wallet-strategy": "1.16.20",
-    "@injectivelabs/wallet-evm": "1.16.20",
+    "@injectivelabs/exceptions": "1.16.22",
+    "@injectivelabs/networks": "1.16.22",
+    "@injectivelabs/sdk-ts": "1.16.22",
+    "@injectivelabs/utils": "1.16.22",
+    "@injectivelabs/wallet-core": "1.16.22",
+    "@injectivelabs/wallet-base": "1.16.22",
+    "@injectivelabs/wallet-strategy": "1.16.22",
+    "@injectivelabs/wallet-evm": "1.16.22",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.0"
