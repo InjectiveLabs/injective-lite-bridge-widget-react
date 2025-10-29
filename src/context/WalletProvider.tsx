@@ -1,4 +1,4 @@
-import { Wallet } from "@injectivelabs/wallet-base";
+import { isEvmWallet, Wallet } from "@injectivelabs/wallet-base";
 import { useState, ReactNode } from "react";
 import { validateMetamask } from "../app/wallet/metamask";
 
@@ -35,6 +35,12 @@ export const WalletProvider = ({
   async function validate() {
     if (!wallet) {
       throw new Error("Wallet not found");
+    }
+
+    if (isEvmWallet(wallet)) {
+      const provider = await walletStrategy.getEip1193Provider();
+
+      await provider.request({ method: "eth_requestAccounts", params: [] });
     }
 
     if (wallet === Wallet.Metamask) {
