@@ -3,15 +3,16 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { Providers } from "./Providers.tsx";
+import { Wallet } from "@injectivelabs/wallet-base";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Providers
-      // wallet={{
-      //   wallet: Wallet.Metamask,
-      //   address: "0x2968698C6b9Ed6D44b667a0b1F312a3b5D94Ded7",
-      //   injectiveAddress: "inj1995xnrrtnmtdgjmx0g937vf28dwefhkhy6gy5e",
-      // }}
+      wallet={{
+        wallet: Wallet.Phantom,
+        address: "0xF22DccAcE9d0610334f32637100CAD2934528F81",
+        injectiveAddress: "inj17gkuet8f6pssxd8nycm3qr9d9y699rupv6397z",
+      }}
       onInit={() => {
         console.log("[onInit]");
       }}

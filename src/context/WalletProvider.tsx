@@ -1,5 +1,5 @@
 import { isEvmWallet, Wallet } from "@injectivelabs/wallet-base";
-import { useState, ReactNode } from "react";
+import { useState, ReactNode, useEffect, useCallback } from "react";
 import { validateMetamask } from "../app/wallet/metamask";
 
 import { getAddresses, walletStrategy } from "../app/wallet/walletStrategy";
@@ -48,9 +48,9 @@ export const WalletProvider = ({
     }
   }
 
-  function init() {
+  const init = useCallback(() => {
     walletStrategy.setWallet(wallet || Wallet.Metamask);
-  }
+  }, [wallet]);
 
   async function connectWallet(wallet: Wallet) {
     await walletStrategy.disconnect();
@@ -86,6 +86,10 @@ export const WalletProvider = ({
 
     // on connect
   }
+
+  useEffect(() => {
+    init();
+  }, [init]);
 
   const value: WalletState = {
     wallet,
