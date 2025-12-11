@@ -18,7 +18,7 @@ type WidgetProps = {
   mock?: boolean;
 };
 
-type CreateWidgetFn = (selector: string, props: WidgetProps) => void;
+type CreateWidgetFn = (selector: string | Element, props: WidgetProps) => void;
 
 declare global {
   interface Window {
@@ -27,10 +27,17 @@ declare global {
 }
 
 const createWidget: CreateWidgetFn = (
-  selector: string,
+  selector: string | Element,
   { onInit, onSuccess, onError, onBalanceFetched, wallet, mock }: WidgetProps
 ) => {
-  const root = createRoot(document.getElementById(selector)!);
+  const container =
+    typeof selector === "string" ? document.getElementById(selector) : selector;
+
+  if (!container) {
+    throw new Error("createWidget: target element not found");
+  }
+
+  const root = createRoot(container);
   root.render(
     <StrictMode>
       <Providers
